@@ -1,0 +1,19 @@
+﻿<Window x:Class="Advent2024.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Advent2024"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="631.985" Width="1279.779">
+    <Window.DataContext>
+        <local:MainView/>
+    </Window.DataContext>
+    <Grid Margin="0,0,-23,-31">
+        <TextBox x:Name="InputBox" Height="113" Margin="33,48,656,0" TextWrapping="Wrap" VerticalAlignment="Top" AcceptsReturn="True" KeyUp="InputBoxKeyUp" Grid.Column="1" Text="{Binding InText}"/>
+        <TextBox x:Name="OutputBox" Height="401" Margin="33,181,41,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding OutText}" FontFamily="Global Monospace"/>
+        <TextBox x:Name="DayBox" HorizontalAlignment="Left" Height="30" Margin="10,18,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="74" AcceptsReturn="True" KeyUp="DayBoxKeyUp"/>
+
+    </Grid>
+</Window>
+ 
