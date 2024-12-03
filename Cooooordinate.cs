@@ -100,11 +100,11 @@ namespace Advent2024
             long hCode = x ^ y;
             return hCode.GetHashCode();
         }
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return Equals(obj as Cooooordinate);
         }
-        public bool Equals(Cooooordinate obj)
+        public bool Equals(Cooooordinate? obj)
         {
             return obj != null && obj.x == x && obj.y == y;
         }
@@ -124,7 +124,7 @@ namespace Advent2024
     }
     class CooooordinateEqualityComparer : IEqualityComparer<Cooooordinate>
     {
-        public bool Equals(Cooooordinate b1, Cooooordinate b2)
+        public bool Equals(Cooooordinate? b1, Cooooordinate?  b2)
         {
             if (b2 == null && b1 == null)
                 return true;

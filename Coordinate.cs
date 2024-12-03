@@ -105,12 +105,12 @@ namespace Advent2024
             int hCode = x ^ y;
             return hCode.GetHashCode();
         }
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var other = obj as Coordinate;
             return other != null && other.x == x && other.y == y;
         }
-        public bool Equals(Coordinate other)
+        public bool Equals(Coordinate? other)
         {
             return other != null && other.x == x && other.y == y;
         }
@@ -130,7 +130,7 @@ namespace Advent2024
     }
     class CoordinateEqualityComparer : IEqualityComparer<Coordinate>
     {
-        public bool Equals(Coordinate b1, Coordinate b2)
+        public bool Equals(Coordinate? b1, Coordinate? b2)
         {
             if (b2 == null && b1 == null)
                 return true;
