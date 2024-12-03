@@ -12,7 +12,7 @@ namespace Advent2024
         string Input;
         public Day03(string _input) : base(_input)
         {
-            Input = this.CheckFile(_input);//.TrimEnd('\r', '\n');
+            Input = this.CheckFile(_input);
         }
         public override Tuple<string, string> GetResult()
         {
