@@ -14,12 +14,14 @@ namespace Advent2024
         string xmas = "XMAS";
         Dictionary<Coordinate, char> Map;
         Dictionary<Coordinate, char> Starts;
+        Dictionary<Coordinate, char> XCandidates;
         public Day04(string _input) : base(_input)
         {
             string Input = this.CheckFile(_input);
             Instructions = this.ParseStringArray(Input);
             Map = new Dictionary<Coordinate, char>();
             Starts = new Dictionary<Coordinate, char>();
+            XCandidates = new Dictionary<Coordinate, char>();
             for (int y = 0; y < Instructions.Length; y++)
             {
                 for (int x = 0; x < Instructions[0].Length; x++)
@@ -29,6 +31,10 @@ namespace Advent2024
                     if (c == 'X')
                     {
                         Starts.Add(new Coordinate(x, y), c);
+                    }
+                    if (c == 'A')
+                    {
+                        XCandidates.Add(new Coordinate(x, y), c);
                     }
                 }
             }
@@ -40,26 +46,27 @@ namespace Advent2024
         public string GetPartOne()
         {
             int ReturnValue = 0;
-            foreach(KeyValuePair<Coordinate,char> s in Starts)
+            foreach (KeyValuePair<Coordinate, char> s in Starts)
             {
-                ReturnValue+= checkForMatches(s.Key, xmas);
+                ReturnValue += checkForMatches(s.Key, xmas);
             }
             return ReturnValue.ToString();
         }
         public string GetPartTwo()
         {
             int ReturnValue = 0;
-
+            foreach (Coordinate x in XCandidates.Keys)
+                ReturnValue += CheckForXs(x);
             return ReturnValue.ToString();
         }
         int checkForMatches(Coordinate start, string match)
         {
             int returnValue = 0;
-            List<Coordinate> neighbours = start.GetNeihbours(Diagonals:true);
+            List<Coordinate> neighbours = start.GetNeihbours(Diagonals: true);
             List<Coordinate> directions = new List<Coordinate>();
             foreach (Coordinate n in neighbours)
             {
-                if (Map.ContainsKey(n) && Map[n] == xmas[1] )
+                if (Map.ContainsKey(n) && Map[n] == xmas[1])
                     directions.Add(n.RelativePosition(start));
             }
             if (directions.Count > 0)
@@ -68,9 +75,9 @@ namespace Advent2024
                     List<Coordinate> next = new List<Coordinate>();
                     foreach (Coordinate d in directions)
                     {
-                        Coordinate c = new Coordinate(start.x+ d.x * i,start.y+ d.y * i);
-                        
-                        if (Map.ContainsKey(c) && Map[ c] == match[i])
+                        Coordinate c = new Coordinate(start.x + d.x * i, start.y + d.y * i);
+
+                        if (Map.ContainsKey(c) && Map[c] == match[i])
                         {
                             char cc = Map[c];
                             next.Add(d);
@@ -85,6 +92,31 @@ namespace Advent2024
                 }
 
             return returnValue;
+        }
+        int CheckForXs(Coordinate start)
+        {
+            Coordinate[] Corners =
+            {
+                new Coordinate(-1,1),
+                new Coordinate(1,1),
+                new Coordinate(-1,-1),
+                new Coordinate(1,-1)
+            };
+            int Ms = 0;
+            int Ss = 0;
+            foreach(Coordinate c in Corners)
+            {
+                Coordinate test = start.GetSum(c);
+                if (!Map.ContainsKey(test))
+                    return 0;
+                if (Map[test] == 'M')
+                    Ms++;
+                else if (Map[test] == 'S')
+                    Ss++;
+            }
+            if(Ms == 2 && Ss ==2 && Map[start.GetSum(Corners[0])]!= Map[start.GetSum(Corners[3])])
+                return 1;
+            return 0;
         }
     }
 }
