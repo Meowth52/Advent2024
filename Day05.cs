@@ -93,7 +93,7 @@ namespace Advent2024
 
                 }
             }
-            foreach(var better in BadProduction)
+            foreach (var better in BadProduction)
             {
                 ReturnValue += better.First(x => x.Value == (better.Count / 2)).Key;
             }
