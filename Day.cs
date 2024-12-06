@@ -119,5 +119,19 @@ namespace Advent2024
             }
             return ReturnList;
         }
+        public Dictionary<Coordinate, char> ParseCoordinateCharDic(string input)
+        {
+            Dictionary<Coordinate, char> ReturnDic = new Dictionary<Coordinate, char>();
+            string Input = input.Replace("\r\n", "_");
+            string[] RawInstructions = Input.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
+            for(int y=0;y<RawInstructions.Length;y++)
+            {
+                for(int x = 0; x < RawInstructions[y].Length; x++)
+                {
+                    ReturnDic.Add(new Coordinate(x, RawInstructions.Length - (y + 1)), RawInstructions[y][x]);
+                }
+            }
+            return ReturnDic;
+        }
     }
 }
