@@ -64,7 +64,30 @@ namespace Advent2024
         public string GetPartTwo()
         {
             int ReturnValue = 0;
+            HashSet<Coordinate> resonances = new HashSet<Coordinate>();
+            foreach (KeyValuePair<char, List<Coordinate>> nodes in Map)
+            {
+                foreach (Coordinate node in nodes.Value)
+                {
+                    foreach (Coordinate other in nodes.Value)
+                    {
+                        if (node != other)
+                        {
+                            Coordinate resonance = new Coordinate(other);
+                            Coordinate differance = new Coordinate(node.RelativePosition(other));
+                            int iterator = 1;
+                            while (resonance.IsInPositiveBounds(Xmax, Ymax))
+                            {
+                                resonances.Add(resonance);
+                                resonance = new Coordinate((node.x + iterator*differance.x), (node.y + iterator * differance.y));
+                                iterator++;
+                            }
+                        }
+                    }
 
+                }
+            }
+            ReturnValue = resonances.Count;
             return ReturnValue.ToString();
         }
     }
