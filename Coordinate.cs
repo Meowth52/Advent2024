@@ -75,6 +75,10 @@ namespace Advent2024
         {
             return (x >= 0 && y >= 0 && x <= x2 && y <= y2);
         }
+        public bool IsInPositiveBounds(Coordinate c)
+        {
+            return (x >= 0 && y >= 0 && x <= c.x && y <= c.y);
+        }
         public int ManhattanDistance(Coordinate coo)
         {
             return Math.Abs(this.x - coo.x) + Math.Abs(this.y - coo.y);
