@@ -73,6 +73,7 @@ namespace Advent2024
                 foreach (Coordinate ex in area.ExludedCoordinates)
                 {
                     bool corner = false;
+                    int corners = 0;
                     List<Coordinate> straightNeighbours = ex.GetNeihbours();
                     List<Coordinate> lessNeighbours = new List<Coordinate>();
                     foreach (Coordinate neighbour in straightNeighbours)
@@ -82,7 +83,17 @@ namespace Advent2024
                             lessNeighbours.Add(neighbour);
                         }
                     }
-                    if (lessNeighbours.Count > 1)
+                    if (lessNeighbours.Count <= 1)
+                        ;
+                    else if (lessNeighbours.Count == 3)
+                    {
+                        corners = 2;
+                    }
+                    else if (lessNeighbours.Count == 4)
+                    {
+                        corners = 4;
+                    }
+                    else if ( lessNeighbours.Count==2)
                     {
                         foreach (Coordinate one in lessNeighbours)
                         {
@@ -91,7 +102,7 @@ namespace Advent2024
                                 if (Math.Abs(one.x - other.x) == 1 && Math.Abs(one.y - other.y) == 1)
                                 {
                                     corner = true;
-                                    inner++;
+                                    corners=1;
                                     break;
                                 }
                             }
@@ -99,36 +110,23 @@ namespace Advent2024
                                 break;
                         }
                     }
-
+                    inner += corners;
                 }
                 foreach (Coordinate inc in area.IncludedCoordinates)
                 {
                     List<Coordinate> queerNeighbours = inc.GetNeihbours(Diagonals: true);
+                    List<Coordinate> straightNeighbours = inc.GetNeihbours();
                     foreach (Coordinate neighbour in queerNeighbours)
                     {
-                        int edginess = 0;
-                        int edginesser = 0;
-                        List<Coordinate> straightNeighbours = neighbour.GetNeihbours();
-                        foreach (Coordinate neighbour2 in neighbour.GetNeihbours(Diagonals: true))
+                        if(!area.IncludedCoordinates.Contains(neighbour)&& !straightNeighbours.Contains(neighbour))
                         {
-                            if (area.IncludedCoordinates.Contains(neighbour2) && !straightNeighbours.Contains(neighbour2))
-                            {
-                                edginess++;
-                            }
-                            if (area.IncludedCoordinates.Contains(neighbour2) && straightNeighbours.Contains(neighbour2))
-                            {
-                                edginess = 0;
-                                break;
-                            }
-                        }
-                        if (edginess >= 1)
-                        {
-                            outer++;
+                            if(!(area.IncludedCoordinates.Contains(new Coordinate(inc.x, neighbour.y)) || area.IncludedCoordinates.Contains(new Coordinate(neighbour.x, inc.y))))
+                                outer++;
                         }
                     }
 
                 }
-                sides = inner / 2 + outer;
+                sides = inner  + outer;
                 ReturnValue += (sides) * area.IncludedCoordinates.Count;
             }
             return ReturnValue.ToString();
@@ -140,7 +138,7 @@ namespace Advent2024
         public Coordinate Corner1;
         public Coordinate Corner2;
         public HashSet<Coordinate> IncludedCoordinates;
-        public List<Coordinate> ExludedCoordinates;
+        public HashSet<Coordinate> ExludedCoordinates;
         public int Perimiter;
         public Area(Coordinate First, char type)
         {
@@ -148,7 +146,7 @@ namespace Advent2024
             Corner2 = new Coordinate(First);
             IncludedCoordinates = new HashSet<Coordinate>();
             IncludedCoordinates.Add(First);
-            ExludedCoordinates = new List<Coordinate>();
+            ExludedCoordinates = new HashSet<Coordinate>();
             Type = type;
             Perimiter = 0;
         }
