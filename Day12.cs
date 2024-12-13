@@ -68,26 +68,68 @@ namespace Advent2024
             foreach (Area area in AreaList)
             {
                 int sides = 0;
-                foreach (Coordinate neigbour in area.ExludedCoordinates)
+                int inner = 0;
+                int outer = 0;
+                foreach (Coordinate ex in area.ExludedCoordinates)
                 {
-                    bool bbreak = false;
-                    int inner = 0;
-                    int outer = 0;
-                    foreach (Coordinate compare in area.ExludedCoordinates)
-                        if ((Math.Abs(neigbour.x - compare.x) == 1 && Math.Abs(compare.y - neigbour.y) == 1))
+                    bool corner = false;
+                    List<Coordinate> straightNeighbours = ex.GetNeihbours();
+                    List<Coordinate> lessNeighbours = new List<Coordinate>();
+                    foreach (Coordinate neighbour in straightNeighbours)
+                    {
+                        if (area.IncludedCoordinates.Contains(neighbour))
+                        {
+                            lessNeighbours.Add(neighbour);
+                        }
+                    }
+                    if (lessNeighbours.Count > 1)
+                    {
+                        foreach (Coordinate one in lessNeighbours)
+                        {
+                            foreach (Coordinate other in lessNeighbours)
+                            {
+                                if (Math.Abs(one.x - other.x) == 1 && Math.Abs(one.y - other.y) == 1)
+                                {
+                                    corner = true;
+                                    inner++;
+                                    break;
+                                }
+                            }
+                            //if (corner)
+                            //    break;
+                        }
+                    }
+
+                }
+                foreach (Coordinate inc in area.IncludedCoordinates)
+                {
+                    List<Coordinate> queerNeighbours = inc.GetNeihbours(Diagonals: true);
+                    foreach (Coordinate neighbour in queerNeighbours)
+                    {
+                        int edginess = 0;
+                        int edginesser = 0;
+                        List<Coordinate> straightNeighbours = neighbour.GetNeihbours();
+                        foreach (Coordinate neighbour2 in neighbour.GetNeihbours(Diagonals: true))
+                        {
+                            if (area.IncludedCoordinates.Contains(neighbour2) && !straightNeighbours.Contains(neighbour2))
+                            {
+                                edginess++;
+                            }
+                            if (area.IncludedCoordinates.Contains(neighbour2) && straightNeighbours.Contains(neighbour2))
+                            {
+                                edginess = 0;
+                                break;
+                            }
+                        }
+                        if (edginess >= 1)
                         {
                             outer++;
                         }
-                        else if (neigbour.Equals(compare))
-                        {
-                            inner++;
-                        }
-                    if (inner > 1)
-                        sides += inner - 1;
-                    else
-                        sides += outer;
+                    }
+
                 }
-                ReturnValue += (sides / 2) * area.IncludedCoordinates.Count;
+                sides = inner / 2 + outer;
+                ReturnValue += (sides) * area.IncludedCoordinates.Count;
             }
             return ReturnValue.ToString();
         }
