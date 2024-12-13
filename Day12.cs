@@ -95,8 +95,8 @@ namespace Advent2024
                                     break;
                                 }
                             }
-                            //if (corner)
-                            //    break;
+                            if (corner)
+                                break;
                         }
                     }
 
