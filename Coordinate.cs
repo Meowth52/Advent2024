@@ -28,21 +28,53 @@ namespace Advent2024
             {
                 case 'E':
                 case 'R':
+                case '>':
                     this.AddTo(new Coordinate(1 * n, 0));
                     break;
                 case 'W':
                 case 'L':
+                case '<':
                     this.AddTo(new Coordinate(-1 * n, 0));
                     break;
                 case 'N':
                 case 'U':
+                case '^':
                     this.AddTo(new Coordinate(0, 1 * n));
                     break;
                 case 'S':
                 case 'D':
+                case 'v':
                     this.AddTo(new Coordinate(0, -1 * n));
                     break;
             }
+        }
+        public Coordinate LookAheadNSteps(char c, int n = 1)
+        {
+            Coordinate C = new Coordinate(this);
+            switch (c)
+            {
+                case 'E':
+                case 'R':
+                case '>':
+                    C.AddTo(new Coordinate(1 * n, 0));
+                    break;
+                case 'W':
+                case 'L':
+                case '<':
+                    C.AddTo(new Coordinate(-1 * n, 0));
+                    break;
+                case 'N':
+                case 'U':
+                case '^':
+                    C.AddTo(new Coordinate(0, 1 * n));
+                    break;
+                case 'S':
+                case 'D':
+                case 'v':
+                    C.AddTo(new Coordinate(0, -1 * n));
+                    break;
+            }
+            return C;
         }
         public static int Turn(int direction, int where)
         {
