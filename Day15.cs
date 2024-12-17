@@ -20,6 +20,8 @@ namespace Advent2024
             {
                 if (c.y > YMax)
                     YMax = c.y;//bloody bacwards scoring
+                if (c.x > XMax)
+                    XMax = c.x;
             }
         }
         public override Tuple<string, string> GetResult()
@@ -83,7 +85,7 @@ namespace Advent2024
                     right = ']';
                 }
                 if (place.Value == '@')
-                    player = new Coordinate(place.Key);
+                    player = new Coordinate(place.Key.x * 2, place.Key.y);
                 if (place.Value == '#')
                 {
                     left = '#';
@@ -103,7 +105,7 @@ namespace Advent2024
                 {
                     while (queue.Count > 0)
                     {
-                        Coordinate check = queue.Dequeue();
+                        Coordinate check = new Coordinate(queue.Dequeue());
                         remove.Add(check);
                         Coordinate IsThisIt = check.LookAheadNSteps(c);
                         if (map[IsThisIt] == '#')
@@ -111,27 +113,20 @@ namespace Advent2024
                             donk = true;
                             break;
                         }
-                        if (map[IsThisIt] == '[')
+                        if (map[IsThisIt] == '[' || map[IsThisIt] == ']')
                         {
-                            if (!maybe.ContainsKey(IsThisIt))
-                                maybe.Add(new Coordinate(IsThisIt), ' ');
-                            maybe[IsThisIt] = map[check];
                             queue.Enqueue(new Coordinate(IsThisIt));
                         }
-                        if (map[IsThisIt] == ']')
-                        {
-                            if (!maybe.ContainsKey(IsThisIt))
-                                maybe.Add(new Coordinate(IsThisIt), ' ');
-                            maybe[IsThisIt] = map[check];
-                            queue.Enqueue(new Coordinate(IsThisIt));
-                        }
+                        if (!maybe.ContainsKey(IsThisIt))
+                            maybe.Add(new Coordinate(IsThisIt), ' ');
+                        maybe[IsThisIt] = map[check];
                     }
                 }
                 else
                 {
                     while (queue.Count > 0)
                     {
-                        Coordinate check = queue.Dequeue();
+                        Coordinate check = new Coordinate(queue.Dequeue());
                         remove.Add(check);
                         Coordinate IsThisIt = check.LookAheadNSteps(c);
                         if (map[IsThisIt] == '#')
@@ -141,20 +136,17 @@ namespace Advent2024
                         }
                         if (map[IsThisIt] == '[')
                         {
-                            if (!maybe.ContainsKey(IsThisIt))
-                                maybe.Add(new Coordinate(IsThisIt), ' ');
-                            maybe[IsThisIt] = map[check];
                             queue.Enqueue(new Coordinate(IsThisIt));
                             queue.Enqueue(new Coordinate(IsThisIt.LookAheadNSteps('>')));
                         }
                         if (map[IsThisIt] == ']')
                         {
-                            if (!maybe.ContainsKey(IsThisIt))
-                                maybe.Add(new Coordinate(IsThisIt), ' ');
-                            maybe[IsThisIt] = map[check];
                             queue.Enqueue(new Coordinate(IsThisIt));
                             queue.Enqueue(new Coordinate(IsThisIt.LookAheadNSteps('<')));
                         }
+                        if (!maybe.ContainsKey(IsThisIt))
+                            maybe.Add(new Coordinate(IsThisIt), ' ');
+                        maybe[IsThisIt] = map[check];
                     }
                 }
                 if (!donk)
@@ -170,7 +162,7 @@ namespace Advent2024
                     }
                 }
             }
-            map[player] = '.';
+            map[player] = '@';
             int boxes = 0;
             foreach (KeyValuePair<Coordinate, char> place in map)
             {
