@@ -6,17 +6,20 @@ namespace Advent2024
 {
     public class Day17 : Day
     {
+        int AStart;
+        int BStart;
+        int CStart;
         long A;
-        long B;
-        long C;
+        int B;
+        int C;
         List<int> Instructions;
         public Day17(string _input) : base(_input)
         {
             string Input = this.CheckFile(_input);
             List<int> list = this.ParseListOfInteger(Input);
-            A = list[0];
-            B = list[1];
-            C = list[2];
+            AStart = list[0];
+            BStart = list[1];
+            CStart = list[2];
             Instructions = list.GetRange(3, list.Count - 3);
         }
         public override Tuple<string, string> GetResult()
@@ -25,22 +28,55 @@ namespace Advent2024
         }
         public string GetPartOne()
         {
-            List<long> ReturnValue = new List<long>();
+            List<int> ReturnValue = RunProgram(AStart);
+
+            StringBuilder out1 = new StringBuilder();
+            foreach (int i in ReturnValue)
+            {
+                out1.Append(i);
+                out1.Append(',');
+            }
+            return out1.ToString();
+        }
+        public string GetPartTwo()
+        {
+            List<int> ReturnValue = new List<int>();
+            long i = 0;
+            while (true)
+            {
+                i++;
+                ReturnValue = new List<int>(RunProgram(i));
+                if (ReturnValue.Count == Instructions.Count)
+                    for (int j = 0; j < Instructions.Count; j++)
+                    {
+                        if (ReturnValue[j] != Instructions[j])
+                            break;
+                        if (j == Instructions.Count - 1)
+                            return i.ToString();
+                    }
+            }
+
+            return i.ToString();
+        }
+        public List<int> RunProgram(long a)
+        {
+            List<int> ReturnValue = new List<int>();
             int pointer = 0;
+            A = a;
+            B = BStart;
+            C = CStart;
             while (pointer >= 0 && pointer < Instructions.Count)
             {
-                if (A < 0 || B < 0 || C < 0)
-                    ;
                 int operand = Instructions[pointer + 1];
                 bool jump = false;
 
                 switch (Instructions[pointer])
                 {
                     case 0: //adv
-                        A = A / ((long)Math.Pow(2, Combo(operand)));
+                        A = A / ((int)Math.Pow(2, Combo(operand)));
                         break;
                     case 1:
-                        B = B | operand;
+                        B = B ^ operand;
                         break;
                     case 2:
                         B = Combo(operand) % 8;
@@ -56,14 +92,14 @@ namespace Advent2024
                         B = B ^ C;
                         break;
                     case 5:
-                        long i = Combo(operand) % 8;
+                        int i = Combo(operand) % 8;
                         ReturnValue.Add(i);
                         break;
                     case 6:
-                        B = A / ((long)Math.Pow(2, Combo(operand)));
+                        B = (int)A / ((int)Math.Pow(2, Combo(operand)));
                         break;
                     case 7:
-                        C = A / ((long)Math.Pow(2, Combo(operand)));
+                        C = (int)A / ((int)Math.Pow(2, Combo(operand)));
                         break;
                     default:
                         break;
@@ -72,29 +108,16 @@ namespace Advent2024
                 if (!jump)
                     pointer += 2;
             }
+            return ReturnValue;
 
-            StringBuilder out1 = new StringBuilder();
-            foreach (long i in ReturnValue)
-            {
-                out1.Append(i);
-                out1.Append(',');
-            }
-            //not 7,1,4,3,5,5,2,7,7
-            return out1.ToString();
         }
-        public string GetPartTwo()
+        public int Combo(int value)
         {
-            int ReturnValue = 0;
-
-            return ReturnValue.ToString();
-        }
-        public long Combo(long value)
-        {
-            long ReturnValue = value;
+            int ReturnValue = value;
             switch (value)
             {
                 case 4:
-                    ReturnValue = A;
+                    ReturnValue = (int)A;
                     break;
                 case 5:
                     ReturnValue = B;
