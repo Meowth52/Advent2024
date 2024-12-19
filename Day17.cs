@@ -41,7 +41,7 @@ namespace Advent2024
         public string GetPartTwo()
         {
             List<int> ReturnValue = new List<int>();
-            long i = 0;
+            long i = 1;
             while (true)
             {
                 i++;
@@ -65,11 +65,13 @@ namespace Advent2024
             A = a;
             B = BStart;
             C = CStart;
+            string binarye = Convert.ToString(a, 2);
+            //ReturnValue.Add(Int32.Parse(binarye));
             while (pointer >= 0 && pointer < Instructions.Count)
             {
                 int operand = Instructions[pointer + 1];
                 bool jump = false;
-
+                //ReturnValue.Add((int)Instructions[pointer]);
                 switch (Instructions[pointer])
                 {
                     case 0: //adv
